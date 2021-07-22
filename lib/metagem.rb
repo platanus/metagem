@@ -3,20 +3,13 @@ require "metagem/engine"
 module Metagem
   extend self
 
-  # You can add, in this module, your own configuration options as in the example below...
-  #
-  # attr_writer :my_option
-  #
-  # def my_option
-  #   return "Default Value" unless @my_option
-  #   @my_option
-  # end
-  #
-  # Then, you can customize the default behaviour (typically in a Rails initializer) like this:
-  #
-  # Metagem.setup do |config|
-  #   config.root_url = "Another value"
-  # end
+  attr_writer :use_active_admin
+
+  def use_active_admin
+    return true unless @use_active_admin
+
+    !!@use_active_admin
+  end
 
   def setup
     yield self
