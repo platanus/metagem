@@ -1,0 +1,22 @@
+require "<%= @config.gem_name %>/engine"
+
+module <%= @config.gem_class %>
+  extend self
+
+  MODULE_DEPENDENCIES = %i{}
+
+  mattr_accessor *MODULE_DEPENDENCIES
+
+  def configure
+    yield self
+    require "<%= @config.gem_name %>"
+  end
+
+  class << self
+    MODULE_DEPENDENCIES.each do |symbol|
+      define_method(symbol) do
+        class_variable_get(:"@@#{symbol}").constantize
+      end
+    end
+  end
+end
