@@ -1,5 +1,5 @@
 guard :rspec, cmd: "bundle exec rspec" do
-  spec_dic = "spec/dummy/spec"
+  spec_dic = "spec"
   # RSpec files
   watch("spec/spec_helper.rb") { spec_dic }
   watch("spec/rails_helper.rb") { spec_dic }
