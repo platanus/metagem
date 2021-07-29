@@ -44,7 +44,7 @@ jobs:
           name: Get files to lint
           command: |
             mkdir tmp
-            git diff origin/master --name-only --diff-filter=d > tmp/files_to_lint
+            git diff origin/main --name-only --diff-filter=d > tmp/files_to_lint
       - run:
           name: Run rubocop
           shell: /bin/bash
