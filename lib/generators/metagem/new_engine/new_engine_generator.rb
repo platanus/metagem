@@ -24,6 +24,7 @@ class Metagem::NewEngineGenerator < Rails::Generators::NamedBase
     remove_dir("#{config.gem_path}/lib/tasks")
     remove_file("#{config.gem_path}/Rakefile")
     remove_file("#{config.gem_path}/MIT-LICENSE")
+    remove_file("#{config.gem_path}/bin/rails")
   end
 
   def replace_readme
@@ -77,14 +78,6 @@ class Metagem::NewEngineGenerator < Rails::Generators::NamedBase
   def replace_engine_file
     engine_file_path = "#{config.gem_lib_path}/engine.rb"
     template("engine.rb.erb", engine_file_path, force: true)
-  end
-
-  def replace_rails_bin
-    template(
-      "bin_rails.erb",
-      "#{config.gem_path}/bin/rails",
-      force: true
-    )
   end
 
   def create_initializer
