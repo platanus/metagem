@@ -1,0 +1,5 @@
+Description:
+    Generator to create new engines in your Rails project.
+
+Example:
+    rails generate metagem:new_engine engine_name

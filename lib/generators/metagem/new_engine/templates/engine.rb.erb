@@ -1,0 +1,29 @@
+require 'power-types'
+
+module <%= @config.gem_class %>
+  class Engine < ::Rails::Engine
+    isolate_namespace <%= @config.gem_class %>
+
+    config.generators do |g|
+      g.assets false
+      g.stylesheets false
+      g.helper false
+      g.test_framework nil
+    end
+
+    config.before_initialize do
+      config.i18n.load_path += Dir["#{config.root}/config/locales/**/*.yml"]
+    end
+
+    initializer :append_migrations do |app|
+      unless app.root.to_s.match?(root.to_s + File::SEPARATOR)
+        app.config.paths["db/migrate"].concat(config.paths["db/migrate"].expanded)
+      end
+    end
+
+    initializer "initialize" do
+      require_relative "./errors"
+      require_relative "./activeadmin_config"
+    end
+  end
+end
