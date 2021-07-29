@@ -11,7 +11,7 @@ module Metagem
     end
 
     def gem_name=(name)
-      @gem_name = name.to_s.singularize.dasherize
+      @gem_name = name.to_s.dasherize
     end
 
     def human_gem_name
