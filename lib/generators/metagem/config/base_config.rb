@@ -35,7 +35,11 @@ module Metagem
     end
 
     def path
-      "#{gem_type_path}/#{gem_name}"
+      "#{Rails.root}/#{gem_type_path}/#{gem_name}"
+    end
+
+    def gem_exist?
+      File.file?(gemspec_path)
     end
 
     def lib_gem_path
