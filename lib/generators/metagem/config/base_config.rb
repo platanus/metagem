@@ -1,13 +1,13 @@
 module Metagem
-  class GemConfig
+  class BaseConfig
     SEPARATOR_COUNT = 50
 
     attr_accessor :summary, :engine
     attr_writer :human_gem_name, :description
     attr_reader :gem_name
 
-    def initialize
-      self.engine = :normal
+    def gem_type
+      raise "gem_type not implemented"
     end
 
     def gem_name=(name)
@@ -30,24 +30,40 @@ module Metagem
       @description
     end
 
-    def gem_directory
+    def gem_type_path
       gem_type.pluralize
     end
 
-    def gem_type
-      engine? ? 'engine' : 'gem'
+    def path
+      "#{gem_type_path}/#{gem_name}"
     end
 
-    def gem_path
-      "#{gem_directory}/#{gem_name}"
+    def lib_gem_path
+      "#{lib_path}/#{gem_name}"
     end
 
-    def gem_lib_path
-      "#{gem_path}/lib/#{gem_name}"
+    def lib_path
+      "#{path}/lib"
     end
 
-    def engine?
-      !!engine
+    def gemfile_path
+      "#{path}/Gemfile"
+    end
+
+    def errors_path
+      "#{lib_gem_path}/errors.rb"
+    end
+
+    def main_file_path
+      "#{path}/lib/#{gem_name}.rb"
+    end
+
+    def gemspec_path
+      "#{path}/#{gem_name}.gemspec"
+    end
+
+    def readme_path
+      "#{path}/README.md"
     end
 
     def to_s
