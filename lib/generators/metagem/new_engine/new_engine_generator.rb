@@ -5,9 +5,12 @@ class Metagem::NewEngineGenerator < Rails::Generators::NamedBase
 
   def load_config
     config.gem_name = file_name
-    config.human_gem_name = ask("Enter engine 'human name':", default: config.human_gem_name)
-    config.summary = ask("Enter the summary of what your plugin does (one sentence):")
-    config.description = ask("Enter engine description (try a little harder here):")
+
+    if !Rails.env.test?
+      config.human_gem_name = ask("Enter engine 'human name':", default: config.human_gem_name)
+      config.summary = ask("Enter the summary of what your plugin does (one sentence):")
+      config.description = ask("Enter engine description (try a little harder here):")
+    end
   end
 
   def show_info
