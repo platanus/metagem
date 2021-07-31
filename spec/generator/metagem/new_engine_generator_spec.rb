@@ -3,6 +3,7 @@ require 'rails_helper'
 require_relative '../../../lib/generators/metagem/new_engine/new_engine_generator.rb'
 
 describe Metagem::NewEngineGenerator, type: :generator do
+  let(:use_active_admin) { true }
   let(:engine_name) { "feedback" }
   let(:readme_file) { file("engines/feedback/README.md") }
   let(:gemspec_file) { file("engines/feedback/feedback.gemspec") }
@@ -23,7 +24,11 @@ describe Metagem::NewEngineGenerator, type: :generator do
     ]
   end
 
-  before { perform }
+  before do
+    allow(Metagem).to receive(:use_active_admin).and_return(use_active_admin)
+    perform
+  end
+
   after { destroy_tmp_dir }
 
   it "removes files and directories" do
@@ -34,13 +39,20 @@ describe Metagem::NewEngineGenerator, type: :generator do
     expect(bin_dir).not_to exist
   end
 
-  fit "generates valid content" do
+  it "generates valid content" do
     expect(readme_file).to contain("# Feedback")
     expect(gemspec_file).to contain("spec.name = \"feedback\"")
     expect(main_file).to contain("require \"feedback/engine\"")
     expect(errors_file).to contain("module Feedback\n  class Error < StandardError\n  end\nend\n")
     expect(engine_gemfile).to contain("https://rubygems.org")
     expect(engine_file).to contain("isolate_namespace Feedback")
+    expect(engine_file).to contain("activeadmin_config")
     expect(initializer).to contain("Feedback.configure do |config|\nend\n")
+  end
+
+  context "with active admin disabled" do
+    let(:use_active_admin) { false }
+
+    it { expect(engine_file).not_to contain("activeadmin_config") }
   end
 end

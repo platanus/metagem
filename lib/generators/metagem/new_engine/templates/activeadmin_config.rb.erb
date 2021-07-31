@@ -1,3 +1,1 @@
-if Metagem.use_active_admin
-  ActiveAdmin.application.load_paths += [File.join(<%= @config.gem_class %>::Engine.root, "admin")]
-end
+ActiveAdmin.application.load_paths += [File.join(<%= @config.gem_class %>::Engine.root, "admin")]
