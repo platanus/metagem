@@ -25,37 +25,35 @@ rails generate metagem:install
 
 ## Usage
 
-TODO
+### Engines
 
-## Development
+#### Engine creation
 
-### Models and migrations
+In order to create a new engine you must run, in the root path of your project, the following generator:
 
-- Create dummy app models with development and testing purposes inside the dummy app `spec/dummy`:
+```bash
+bundle exec rails g metagem:new_engine engine_name
+```
 
-  `bin/rails g model user`
+For example:
 
-  The `User` model will be created in `spec/dummy/app/models`.
-  The `user_spec.rb` file needs to be deleted, but it is a good idea to leave the factory.
+```bash
+bundle exec rails g metagem:new_engine recruiting
+```
 
-- Create engine related models inside the engine's root path '/':
+#### Engine model creation
 
-  `bin/rails g model job`
+In order to create a new model in the engine you must run, in the root path of your project, the following generator:
 
-  The `EngineName::Job` model will be created in `app/models/engine_name`.
-  A factory will be added to `engine_name/spec/factories/engine_name/jobs.rb`, you must to add the `class` option manually.
+```bash
+bundle exec rails g model engine_name/model_name --engine-model
+```
 
-  ```ruby
-  FactoryBot.define do
-    factory :job, class: "EngineName::Job" do
-      # ...
-    end
-  end
-  ```
+For example:
 
-- While developing the engine run migrations in the root path `bin/rails db:migrate`. This will apply the gem and dummy app migrations too.
-- When using in a project, the engine migrations must be copied to it. This can be done by running: `bin/rails engine_name:install:migrations`
-
+```bash
+bundle exec rails g model recruiting/process --engine-model
+```
 ## Testing
 
 To run the specs you need to execute, in the root path of the engine, the following command:

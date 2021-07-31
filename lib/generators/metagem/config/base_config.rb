@@ -30,44 +30,24 @@ module Metagem
       @description
     end
 
-    def gem_type_path
-      gem_type.pluralize
+    def gem_lib_gem_path(resource = nil)
+      resource_or_path("#{gem_lib_path}/#{gem_name}", resource)
     end
 
-    def path
-      "#{Rails.root}/#{gem_type_path}/#{gem_name}"
+    def gem_lib_path(resource = nil)
+      resource_or_path(gem_root_path("lib"), resource)
     end
 
-    def gem_exist?
-      File.file?(gemspec_path)
-    end
-
-    def lib_gem_path
-      "#{lib_path}/#{gem_name}"
-    end
-
-    def lib_path
-      "#{path}/lib"
-    end
-
-    def gemfile_path
-      "#{path}/Gemfile"
-    end
-
-    def errors_path
-      "#{lib_gem_path}/errors.rb"
-    end
-
-    def main_file_path
-      "#{path}/lib/#{gem_name}.rb"
+    def gem_main_file_path
+      gem_lib_path("#{gem_name}.rb")
     end
 
     def gemspec_path
-      "#{path}/#{gem_name}.gemspec"
+      gem_root_path("#{gem_name}.gemspec")
     end
 
-    def readme_path
-      "#{path}/README.md"
+    def gem_root_path(resource = nil)
+      resource_or_path("#{Rails.root}/#{gem_type_path}/#{gem_name}", resource)
     end
 
     def to_s
@@ -83,6 +63,18 @@ module Metagem
         #{'=' * SEPARATOR_COUNT}
 
       HERE
+    end
+
+    private
+
+    def resource_or_path(path, resource)
+      return path unless resource
+
+      "#{path}/#{resource}"
+    end
+
+    def gem_type_path
+      gem_type.pluralize
     end
   end
 end
