@@ -9,6 +9,8 @@ describe Metagem::NewEngineGenerator, type: :generator do
   let(:gemspec_file) { file("engines/feedback/feedback.gemspec") }
   let(:main_file) { file("engines/feedback/lib/feedback.rb") }
   let(:errors_file) { file("engines/feedback/lib/feedback/errors.rb") }
+  let(:extensions_file) { file("engines/feedback/lib/feedback/extensions.rb") }
+  let(:extensions_dir) { file("engines/feedback/app/extensions/feedback/.gitkeep") }
   let(:engine_gemfile) { file("engines/feedback/Gemfile") }
   let(:engine_file) { file("engines/feedback/lib/feedback/engine.rb") }
   let(:initializer) { file("config/initializers/feedback.rb") }
@@ -44,9 +46,13 @@ describe Metagem::NewEngineGenerator, type: :generator do
     expect(gemspec_file).to contain("spec.name = \"feedback\"")
     expect(main_file).to contain("require \"feedback/engine\"")
     expect(errors_file).to contain("module Feedback\n  class Error < StandardError\n  end\nend\n")
+    expect(extensions_file).to contain("include Feedback::MyModelExt")
+    expect(extensions_dir).to exist
     expect(engine_gemfile).to contain("https://rubygems.org")
     expect(engine_file).to contain("isolate_namespace Feedback")
     expect(engine_file).to contain("activeadmin_config")
+    expect(engine_file).to contain("errors")
+    expect(engine_file).to contain("extensions")
     expect(initializer).to contain("Feedback.configure do |config|\nend\n")
   end
 

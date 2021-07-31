@@ -18,6 +18,10 @@ module Metagem
       resource_or_path(gem_root_path("/db/migrate"), resource)
     end
 
+    def gem_extensions_path(resource = nil)
+      resource_or_path(gem_app_path("extensions/#{gem_name}"), resource)
+    end
+
     def gem_app_path(resource = nil)
       resource_or_path(gem_root_path("app"), resource)
     end

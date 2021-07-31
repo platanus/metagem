@@ -26,6 +26,7 @@ module <%= @config.gem_class %>
       <%- if Metagem.use_active_admin -%>
       require_relative "./activeadmin_config"
       <%- end -%>
+      require_relative "./extensions"
     end
   end
 end

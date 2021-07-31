@@ -51,6 +51,11 @@ class Metagem::NewEngineGenerator < Rails::Generators::NamedBase
     template("errors.rb.erb", config.gem_lib_gem_path("errors.rb"))
   end
 
+  def configure_extensions
+    template("extensions.rb.erb", config.gem_lib_gem_path("extensions.rb"))
+    create_file(config.gem_extensions_path(".gitkeep"))
+  end
+
   def relace_gemfile
     template("engine_gemfile", config.gem_root_path("Gemfile"), force: true)
   end

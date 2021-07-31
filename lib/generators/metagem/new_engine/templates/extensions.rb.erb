@@ -1,0 +1,27 @@
+# On this file you need to add:
+#
+# ActiveSupport.on_load("MyModel") do
+#   include <%= @config.gem_class %>::MyModelExt
+# end
+#
+# On <%= @config.gem_extensions_path("my_model_ext.rb") %> you need to add:
+#
+# module <%= @config.gem_class %>
+#   module MyModelExt
+#     extend ActiveSupport::Concern
+#
+#     included do
+#       # some instance methods
+#     end
+#  end
+# end
+#
+# On <%= @config.project_models_path("my_model.rb") %> you need to add:
+#
+# class MyModel < ApplicationRecord
+#   # ...
+#
+#   ActiveSupport.run_load_hooks("MyModel", self)
+# end
+
+
