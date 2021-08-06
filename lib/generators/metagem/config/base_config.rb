@@ -1,13 +1,13 @@
 module Metagem
-  class GemConfig
+  class BaseConfig
     SEPARATOR_COUNT = 50
 
     attr_accessor :summary, :engine
     attr_writer :human_gem_name, :description
     attr_reader :gem_name
 
-    def initialize
-      self.engine = :normal
+    def gem_type
+      raise "gem_type not implemented"
     end
 
     def gem_name=(name)
@@ -30,24 +30,24 @@ module Metagem
       @description
     end
 
-    def gem_directory
-      gem_type.pluralize
+    def gem_lib_gem_path(resource = nil)
+      resource_or_path("#{gem_lib_path}/#{gem_name}", resource)
     end
 
-    def gem_type
-      engine? ? 'engine' : 'gem'
+    def gem_lib_path(resource = nil)
+      resource_or_path(gem_root_path("lib"), resource)
     end
 
-    def gem_path
-      "#{gem_directory}/#{gem_name}"
+    def gem_main_file_path
+      gem_lib_path("#{gem_name}.rb")
     end
 
-    def gem_lib_path
-      "#{gem_path}/lib/#{gem_name}"
+    def gemspec_path
+      gem_root_path("#{gem_name}.gemspec")
     end
 
-    def engine?
-      !!engine
+    def gem_root_path(resource = nil)
+      resource_or_path("#{Rails.root}/#{gem_type_path}/#{gem_name}", resource)
     end
 
     def to_s
@@ -63,6 +63,18 @@ module Metagem
         #{'=' * SEPARATOR_COUNT}
 
       HERE
+    end
+
+    private
+
+    def resource_or_path(path, resource)
+      return path unless resource
+
+      "#{path}/#{resource}"
+    end
+
+    def gem_type_path
+      gem_type.pluralize
     end
   end
 end

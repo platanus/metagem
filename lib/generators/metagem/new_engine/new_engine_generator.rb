@@ -1,14 +1,16 @@
-require_relative '../gem_config'
+require_relative '../config/engine_config'
 
 class Metagem::NewEngineGenerator < Rails::Generators::NamedBase
   source_root File.expand_path('templates', __dir__)
 
   def load_config
-    config.engine = true
     config.gem_name = file_name
-    config.human_gem_name = ask("Enter engine 'human name':", default: config.human_gem_name)
-    config.summary = ask("Enter the summary of what your plugin does (one sentence):")
-    config.description = ask("Enter engine description (try a little harder here):")
+
+    if !Rails.env.test?
+      config.human_gem_name = ask("Enter engine 'human name':", default: config.human_gem_name)
+      config.summary = ask("Enter the summary of what your plugin does (one sentence):")
+      config.description = ask("Enter engine description (try a little harder here):")
+    end
   end
 
   def show_info
@@ -16,87 +18,59 @@ class Metagem::NewEngineGenerator < Rails::Generators::NamedBase
   end
 
   def generate_engine
-    rails_command("plugin new #{config.gem_path} --mountable --skip-git")
+    rails_command("plugin new #{config.gem_root_path} --mountable --skip-git")
   end
 
   def clean_engine
-    remove_dir("#{config.gem_path}/test")
-    remove_dir("#{config.gem_path}/lib/tasks")
-    remove_file("#{config.gem_path}/Rakefile")
-    remove_file("#{config.gem_path}/MIT-LICENSE")
+    remove_dir(config.gem_root_path("test"))
+    remove_dir(config.gem_lib_path("tasks"))
+    remove_file(config.gem_root_path("Rakefile"))
+    remove_file(config.gem_root_path("MIT-LICENSE"))
+    remove_dir(config.gem_root_path("bin"))
   end
 
   def replace_readme
-    template(
-      "README.md.erb",
-      "#{config.gem_path}/README.md",
-      force: true
-    )
+    template("README.md.erb", config.gem_root_path("README.md"), force: true)
   end
 
   def replace_gemspec
-    template(
-      "gemspec.erb",
-      "#{config.gem_path}/#{config.gem_name}.gemspec",
-      force: true
-    )
+    template("gemspec.erb", config.gemspec_path, force: true)
   end
 
   def replace_main_file
-    template(
-      "main.rb.erb",
-      "#{config.gem_path}/lib/#{config.gem_name}.rb",
-      force: true
-    )
+    template("main.rb.erb", config.gem_main_file_path, force: true)
   end
 
   def add_active_admin_config_file
     return unless Metagem.use_active_admin
 
-    template(
-      "activeadmin_config.rb.erb",
-      "#{config.gem_lib_path}/activeadmin_config.rb"
-    )
+    template("activeadmin_config.rb.erb", config.gem_lib_gem_path("activeadmin_config.rb"))
   end
 
   def add_errors_file
-    template(
-      "errors.rb.erb",
-      "#{config.gem_lib_path}/errors.rb"
-    )
+    template("errors.rb.erb", config.gem_lib_gem_path("errors.rb"))
+  end
+
+  def configure_extensions
+    template("extensions.rb.erb", config.gem_lib_gem_path("extensions.rb"))
+    create_file(config.gem_extensions_path(".gitkeep"))
   end
 
   def relace_gemfile
-    template(
-      "engine_gemfile",
-      "#{config.gem_path}/Gemfile",
-      force: true
-    )
+    template("engine_gemfile", config.gem_root_path("Gemfile"), force: true)
   end
 
   def replace_engine_file
-    engine_file_path = "#{config.gem_lib_path}/engine.rb"
-    template("engine.rb.erb", engine_file_path, force: true)
-  end
-
-  def replace_rails_bin
-    template(
-      "bin_rails.erb",
-      "#{config.gem_path}/bin/rails",
-      force: true
-    )
+    template("engine.rb.erb", config.gem_lib_gem_path("engine.rb"), force: true)
   end
 
   def create_initializer
-    template(
-      "initializer.rb.erb",
-      "config/initializers/#{config.gem_name}.rb"
-    )
+    template("initializer.rb.erb", config.project_gem_initialzer_path)
   end
 
   private
 
   def config
-    @config ||= Metagem::GemConfig.new
+    @config ||= Metagem::EngineConfig.new
   end
 end

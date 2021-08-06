@@ -9,7 +9,12 @@ module Metagem
 
     initializer "initialize" do
       # Require here all your engine's classes.
-      require_relative "./example_class"
+    end
+
+    generators do |app|
+      Rails::Generators.configure!(app.config.generators)
+      Rails::Generators.hidden_namespaces.uniq!
+      require 'generators/rails/model_override'
     end
   end
 end

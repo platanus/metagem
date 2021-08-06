@@ -23,7 +23,10 @@ module <%= @config.gem_class %>
 
     initializer "initialize" do
       require_relative "./errors"
+      <%- if Metagem.use_active_admin -%>
       require_relative "./activeadmin_config"
+      <%- end -%>
+      require_relative "./extensions"
     end
   end
 end

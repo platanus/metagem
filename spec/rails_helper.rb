@@ -25,6 +25,7 @@ require "pry"
 require "spec_helper"
 require "rspec/rails"
 require "factory_bot_rails"
+require "ammeter/init"
 
 Dir[::Metagem::Engine.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
@@ -39,5 +40,4 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include ActionDispatch::TestProcess
-  config.include TestHelpers
 end
